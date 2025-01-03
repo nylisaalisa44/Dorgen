@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  # MariaDB
+  db:
+    image: mariadb:11.4
+    container_name: mariadb
+    restart: always
+    environment:
+      MARIADB_DATABASE: dor
+      MARIADB_USER: dor
+      MARIADB_PASSWORD: 12345678
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+      DB_CHARSET: utf8mb4
+      DB_COLLATION: utf8mb4_unicode_ci
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # PHP-FPM Service
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: php
+    restart: always
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      PHP_ENABLE_XDEBUG: 0
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "9000:9000"  # PHP-FPM
+
+  composer:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    command: composer install --no-dev --optimize-autoloader
+
+  worker-template: &worker
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    restart: always
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    environment:
+      PHP_ENABLE_XDEBUG: 0
+    depends_on:
+      - db
+      - redis
+
+  queue-worker:
+    <<: *worker
+    command: sh -c "php /var/www/html/yii queue/listen --verbose=0 --color=0"
+
+  yii-stats-listener:
+    <<: *worker
+    command: sh -c "php /var/www/html/yii rabbit/dorgen-statistics-listen"
+
+  yii-redirect-stat-listener:
+    <<: *worker
+    command: sh -c "php /var/www/html/yii rabbit/dorgen-redirects-stat-listen"
+
+  yii-hit-stat-listener:
+      <<: *worker
+      command: sh -c "php /var/www/html/yii rabbit/dorgen-hit-stat-listen"
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+      - "443:443"
+
+  # Redis
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # Порт для RabbitMQ
+      - "15672:15672" # Порт для UI Management Plugin
+      - "15692:15692"
+    volumes:
+      - ./data:/var/lib/rabbitmq # Том для хранения данных
+    restart: always # Автозапуск при перезагрузке
+    environment:
+      RABBITMQ_NODENAME: rabbit@rabbitmq
+      RABBITMQ_PROMETHEUS: "true"
+
+  # PhpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      UPLOAD_LIMIT: 2048M
+      MEMORY_LIMIT: 6G
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+volumes:
+  mariadb-data:
+  redis-data:

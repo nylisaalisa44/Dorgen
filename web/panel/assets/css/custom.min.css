@@ -1,0 +1,12 @@
+.cursor-hand{cursor:pointer;cursor:hand;}
+.tdbot,.tduser,.tdpreload{--vz-bg-opacity: 0.05;width:60px;text-align:right;border-right: 1px #444 solid; padding-right:4px}
+.tdbot{background-color: rgba(var(--vz-primary-rgb),var(--vz-bg-opacity))!important;}
+.tduser{background-color: rgba(var(--vz-info-rgb),var(--vz-bg-opacity))!important;}
+.tdpreload{background-color: rgba(var(--vz-success-rgb),var(--vz-bg-opacity))!important;}
+.tdleft{text-align:left !important;padding-left:6px !important;}
+.badgetab .badge {margin-right:1px}
+.sm-spin {width:16px !important; height: 16px !important;}
+.dropdown-toggle::after {
+    border: none;
+    vertical-align: unset;
+}
