@@ -59,9 +59,15 @@ Rebuild all containers
 
     docker compose up -d --build
 
+Run the yii Migration
+
+    docker compose run --rm php php yii migrate
+
 You can then access the application through the following URL:
 
     http://localhost
+
+Import test DB .sql from docker folder
 
 ### For development and operations teams
 
@@ -69,13 +75,15 @@ Update your vendor packages
 
     docker compose run --rm php composer update --prefer-dist
 
-Run the installation triggers (creating cookie validation code)
-
-    docker compose run --rm php composer install
-
-Run the yii Migration
-
-    docker compose run --rm php yii migrate
-
 **NOTES:**
 - Minimum required Docker engine version `20.10` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
+
+**Panel**
+
+    http://localhost/panel/default/login
+    admin
+    admin
+
+**Change password to panel**
+    
+    app/models/User.php:17

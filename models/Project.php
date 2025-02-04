@@ -40,9 +40,6 @@ use yii\helpers\ArrayHelper;
  * @property int|null $min_links_white
  * @property int|null $max_links_white
  * @property int|null $is_html
- * @property string|null $pirog_links
- * @property int|null $html_min_links
- * @property int|null $html_max_links
  * @property string $created_at
  * @property string $updated_at
  *
@@ -131,13 +128,11 @@ class Project extends \yii\db\ActiveRecord
             [[
 				'name', 'db', 'status', 'allowed_bots', 'min_perelinks', 'max_perelinks', 'min_snippets', 'max_snippets', 'max_snippets_white',
 				'min_snippets_white', 'min_links_white', 'max_links_white', 'min_snippets_links_white', 'max_snippets_links_white',
-				'html_min_links', 'html_max_links'
 			], 'required'],
             [[
                 'type', 'status', 'min_perelinks', 'max_perelinks', 'farm_redirect_inner_procent', 'farm_redirect_subs', 'min_snippets',
                 'max_snippets', 'use_subs', 'enable_debug', 'max_snippets_white', 'min_snippets_white', 'min_links_white', 'max_links_white', 'rand_anchor_white',
                 'use_subs_white', 'use_project_links_white', 'min_snippets_links_white', 'max_snippets_links_white', 'is_html',
-				'html_min_links', 'html_max_links'
             ], 'integer'],
             [['redirect_urls', 'redirect_type', 'allowed_bots', 'created_at', 'updated_at', 'db'], 'safe'],
             [['name', 'white', 'black', 'black_redir_url', 'debug', 'lang_white', 'pirog_links'], 'string', 'max' => 255],
@@ -182,9 +177,6 @@ class Project extends \yii\db\ActiveRecord
             'min_snippets_links_white' => 'Min Snippets Links Dor',
             'max_snippets_links_white' => 'Max Snippets Links Dor',
 			'is_html' => 'Is html',
-			'html_min_links' => 'Html Min Links',
-			'html_max_links' => 'Html Max Links',
-			'pirog_links' => 'Pirog Links',
             'created_at' => 'Создан',
             'updated_at' => 'Обновлен',
         ];

@@ -94,6 +94,10 @@ class ProjectController extends Controller
                 if ($model->save()) {
                     \Yii::$app->session->setFlash('success', 'Успешно');
                     return $this->redirect(['index']);
+                } else {
+                    $errors = $model->getErrorSummary(true);
+                    \Yii::$app->session->setFlash('error', implode("\n", $errors));
+                    return $this->redirect(['index']);
                 }
             }
         } else {
