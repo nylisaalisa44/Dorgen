@@ -10,7 +10,7 @@ services:
       MARIADB_DATABASE: dor
       MARIADB_USER: dor
       MARIADB_PASSWORD: 12345678
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
       DB_CHARSET: utf8mb4
       DB_COLLATION: utf8mb4_unicode_ci
     volumes:
