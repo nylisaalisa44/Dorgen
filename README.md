@@ -53,15 +53,20 @@ The minimum requirement for this project template is that your Web server suppor
 
 Start the container
 
-    docker compose up -d
+    docker-compose up -d
 
 Rebuild all containers
 
-    docker compose up -d --build
+    docker-compose up -d --build
 
 Run the yii Migration
 
-    docker compose run --rm php php yii migrate
+    docker-compose run --rm php php yii migrate
+
+Run set chmod write folders
+
+    docker-compose run --rm php chmod 777 -R /var/www/html/web/assets
+    docker-compose run --rm php chmod 777 -R /var/www/html/runtime
 
 You can then access the application through the following URL:
 
@@ -73,7 +78,7 @@ Import test DB .sql from docker folder
 
 Update your vendor packages
 
-    docker compose run --rm php composer update --prefer-dist
+    docker-compose run --rm php composer update --prefer-dist
 
 **NOTES:**
 - Minimum required Docker engine version `20.10` for development (see [Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/))
