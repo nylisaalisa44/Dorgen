@@ -10,11 +10,11 @@ services:
       MARIADB_DATABASE: dor
       MARIADB_USER: dor
       MARIADB_PASSWORD: 12345678
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
       DB_CHARSET: utf8mb4
       DB_COLLATION: utf8mb4_unicode_ci
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - ./data/mariadb:/var/lib/mysql
     ports:
       - "3306:3306"
 
@@ -72,8 +72,8 @@ services:
     command: sh -c "php /var/www/html/yii rabbit/dorgen-redirects-stat-listen"
 
   yii-hit-stat-listener:
-      <<: *worker
-      command: sh -c "php /var/www/html/yii rabbit/dorgen-hit-stat-listen"
+    <<: *worker
+    command: sh -c "php /var/www/html/yii rabbit/dorgen-hit-stat-listen"
 
   # Nginx Service
   nginx:
@@ -97,7 +97,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
+      - ./data/redis:/data
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -107,7 +107,7 @@ services:
       - "15672:15672" # Порт для UI Management Plugin
       - "15692:15692"
     volumes:
-      - ./data:/var/lib/rabbitmq # Том для хранения данных
+      - ./data/rabbitmq:/var/lib/rabbitmq # Том для хранения данных
     restart: always # Автозапуск при перезагрузке
     environment:
       RABBITMQ_NODENAME: rabbit@rabbitmq
@@ -127,5 +127,5 @@ services:
     depends_on:
       - db
 volumes:
-  mariadb-data:
-  redis-data:
+  mariadb:
+  redis:
