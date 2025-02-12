@@ -14,7 +14,7 @@ services:
       DB_CHARSET: utf8mb4
       DB_COLLATION: utf8mb4_unicode_ci
     volumes:
-      - ./data/mariadb:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     ports:
       - "3306:3306"
 
@@ -97,7 +97,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./data/redis:/data
+      - redis:/data
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -107,7 +107,7 @@ services:
       - "15672:15672" # Порт для UI Management Plugin
       - "15692:15692"
     volumes:
-      - ./data/rabbitmq:/var/lib/rabbitmq # Том для хранения данных
+      - rabbitmq:/var/lib/rabbitmq # Том для хранения данных
     restart: always # Автозапуск при перезагрузке
     environment:
       RABBITMQ_NODENAME: rabbit@rabbitmq
@@ -129,3 +129,4 @@ services:
 volumes:
   mariadb:
   redis:
+  rabbitmq:
