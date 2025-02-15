@@ -4,7 +4,7 @@ return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=mariadb;dbname=dor',
     'username' => 'dor',
-    'password' => '12345678',
+    'password' => '9y2o51FsiveC',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

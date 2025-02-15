@@ -9,14 +9,12 @@ services:
     environment:
       MARIADB_DATABASE: dor
       MARIADB_USER: dor
-      MARIADB_PASSWORD: 12345678
+      MARIADB_PASSWORD: 9y2o51FsiveC
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: no
       DB_CHARSET: utf8mb4
       DB_COLLATION: utf8mb4_unicode_ci
     volumes:
       - mariadb:/var/lib/mysql
-    ports:
-      - "3306:3306"
 
   # PHP-FPM Service
   php:
@@ -33,8 +31,6 @@ services:
     depends_on:
       - db
       - redis
-    ports:
-      - "9000:9000"  # PHP-FPM
 
   composer:
     build:
@@ -94,8 +90,6 @@ services:
     image: redis:alpine
     container_name: redis
     restart: always
-    ports:
-      - "6379:6379"
     volumes:
       - redis:/data
 
@@ -123,7 +117,7 @@ services:
       UPLOAD_LIMIT: 2048M
       MEMORY_LIMIT: 6G
     ports:
-      - "8080:80"
+      - "8284:80"
     depends_on:
       - db
 volumes:
